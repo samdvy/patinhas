@@ -36,7 +36,28 @@
         </tr>
     
 
-        <!-- AQUI ESCREVER O CÓDIGO EM PHP QUE BUSCA OS ANIMAIS NO BANCO E DADOS E EXIBE NAS LINHAS E COLUNAS DA TABELA -->
+        <?php
+        require_once "db.php";
+
+        $resultado = $conexao->query("SELECT nome, especie, idade, porte, descricao FROM animais ORDER BY data_cadastro DESC");
+
+        if ($resultado && $resultado->num_rows > 0) {
+            while ($animal = $resultado->fetch_assoc()) {
+                $idade = (int) $animal["idade"];
+                echo "<tr>";
+                echo "<td>" . htmlspecialchars($animal["nome"]) . "</td>";
+                echo "<td>" . htmlspecialchars($animal["especie"]) . "</td>";
+                echo "<td>" . $idade . ($idade === 1 ? " ano" : " anos") . "</td>";
+                echo "<td>" . htmlspecialchars($animal["porte"]) . "</td>";
+                echo "<td>" . htmlspecialchars($animal["descricao"]) . "</td>";
+                echo "</tr>";
+            }
+        } else {
+            echo '<tr><td colspan="5" class="centralizado">Nenhum animal cadastrado ainda.</td></tr>';
+        }
+
+        $conexao->close();
+        ?>
 
 </table>
 
